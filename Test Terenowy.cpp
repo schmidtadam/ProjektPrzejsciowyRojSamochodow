@@ -36,7 +36,7 @@ dReal platforma2_sides[3] = {5,3,0};
 // sides
 dReal angle[100];
 dMatrix3 R;
-static dWorldID world;  // a dynamic world
+static dWorldID world;  
 double z;
 dReal x=1;
 dReal wys[100];

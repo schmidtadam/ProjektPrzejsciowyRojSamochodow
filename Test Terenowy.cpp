@@ -15,6 +15,7 @@
 
 #ifdef dDOUBLE
 #define dsDrawBox      dsDrawBoxD
+#define dsDrawSphere dsDrawSphereD
 #endif
 
 #define DENSITY (5.0)	
@@ -24,23 +25,27 @@ struct MyObject
 {
     dBodyID body;		
 };
+
 MyObject box[100];
 MyObject platforma[2];
+MyObject ball;
 
-const dReal   m   = 1.0;
+const dReal r = 0.2;
+const dReal m = 1.0;
+const dReal m1 = 1.0;
 const dReal *pos1,*R1,*pos2,*R2;
 dReal angle_deg[100];
 dReal sides[3] = {5,0.25,0.05};
 dReal platforma_sides[3] = {5,3,2};
 dReal platforma2_sides[3] = {5,3,0};
-// sides
-dReal angle[100];
-dMatrix3 R;
+// boki platform
+dReal angle[100]; // katy belek
+dMatrix3 R; // macierz obrotu
 static dWorldID world;  
 double z;
 dReal x=1;
 dReal wys[100];
-dReal odl[100];
+dReal odl[100]; // odchyłki belek
 
 // start simulation
 static void start()
@@ -55,10 +60,20 @@ static void start()
 static void simLoop (int pause)
 {
     const dReal *pos1,*R1,*pos2,*R2;
+	
 	int j=0;
 	wys[j]=2;
-	dWorldStep(world,0.3);
+	dWorldStep(world,0.00000001);
 	
+    const dReal *pos3,*R3;
+
+    dWorldStep(world,0.01);
+
+    dsSetColor(0.0,0.5,0.0);
+	pos3 = dBodyGetPosition(ball.body);
+    R3   = dBodyGetRotation(ball.body);
+    dsDrawSphere(pos3,R3,r);
+
 	for (int k=1; k<3 ; k++)
 		{
 		dsSetColorAlpha (0.5,0.5,0.5,1);
@@ -98,6 +113,11 @@ static void simLoop (int pause)
 		odl[i]=odl[i-1]+(sides[1]*0.5*cos(angle_deg[i-1]))+(sides[1]*0.5*cos(angle_deg[i]));
 
 	}
+
+	
+
+
+
 }
 
 
@@ -133,6 +153,16 @@ void MakePlatforma()
 }
 }
 
+void MakeBall()
+{
+dMass m;
+ball.body=dBodyCreate(world);
+dMassSetZero(&m);
+dMassSetSphereTotal(&m,m1,r);
+dBodySetMass(ball.body,&m);
+dBodySetPosition(ball.body, 0, 0, 6.0);
+}
+
 
 int main (int argc, char **argv)
 {
@@ -154,7 +184,8 @@ int main (int argc, char **argv)
 
 	MakeBox();
 	MakePlatforma();
-		
+	MakeBall();
+
     // do the simulation
     dsSimulationLoop (argc,argv,960,480,&fn);
 

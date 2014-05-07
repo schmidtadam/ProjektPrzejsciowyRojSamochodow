@@ -37,8 +37,8 @@ MyObject platforma[2];
 MyObject ball[Test_Pilek];
 
 const dReal r = 0.35;
-const dReal m = 1.0;
-const dReal mp = 40.0;
+const dReal m = 5;
+const dReal mp = 400.0;
 const dReal m1 = 1.0;
 const dReal *pos1,*R1,*pos2,*R2;
 
@@ -59,7 +59,7 @@ dReal wysp[2];
 
 static void nearCallback(void *data, dGeomID o1, dGeomID o2)
 {
-  const int N = 8;
+  const int N = 30;
   dContact contact[N];
 
   int isGround = ((ground == o1) || (ground == o2));
@@ -277,7 +277,7 @@ void WartosciPoczatkowe() // Wylosowanie kątów, ustawienie belek i platform
 	for (int j=1;j<DL_Most;j++)
 	{
 		wys[j]=wys[j-1]+(sides[1]*0.5*sin(angle_deg[j-1]))+(sides[1]*0.5*sin(angle_deg[j]));
-		odl[j]=0.02+odl[j-1]+(sides[1]*0.5*cos(angle_deg[j-1]))+(sides[1]*0.5*cos(angle_deg[j]));
+		odl[j]=0.05+odl[j-1]+(sides[1]*0.5*cos(angle_deg[j-1]))+(sides[1]*0.5*cos(angle_deg[j]));
 	}
 }
 
@@ -300,7 +300,7 @@ int main (int argc, char **argv)
 	space = dHashSpaceCreate(0);
     contactgroup = dJointGroupCreate(0);
 
-	dWorldSetGravity(world,0,0,-0.5);
+	dWorldSetGravity(world,0,0,-2);
 
 	ground = dCreatePlane(space,0,0,1,0);
 	
